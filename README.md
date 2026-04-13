@@ -1,31 +1,46 @@
 # AI Updates Workspace
 
-This folder contains the different versions of your AI news app so you can keep building without losing earlier work.
+This repository contains the AI news prioritization app and its earlier static MVP.
+
+## Live product
+
+- Vercel app: `https://ai-updates-one.vercel.app`
+- GitHub repo: `https://github.com/cgflorides/ai-updates`
 
 ## Projects
 
 ### `static-mvp`
 
-Your first simple version.
+The first simple version.
 
 - plain HTML, CSS, and JavaScript
-- easiest version to understand
-- good for fast experiments
+- useful as a learning reference
+- good for quick experimentation
 
 ### `nextjs-app`
 
-Your more structured version.
+The active product version.
 
-- uses the Next.js app structure
-- separates UI from data-fetching logic
-- better foundation for future features
+- built with Next.js
+- supports weighted ranking, clustering, search, filtering, detail panels, and reusable outputs
+- deployed to Vercel
 
-## Recommended path
+## Product documents
 
-1. keep `static-mvp` as your simple reference
-2. build new features mainly in `nextjs-app`
-3. later add deployment, authentication, summaries, and saved items
+- implementation package: `docs/implementation-package.md`
+- source-of-truth PDF copy: `build-spec.pdf`
 
-## Important note
+## Current product focus
 
-This machine currently does not have `node` or `npm` installed, so the Next.js app is set up but cannot be started yet until those tools are installed.
+The current app is optimized for:
+
+- technical project managers
+- solo consultants
+- leadership users
+
+It prioritizes:
+
+- regulation
+- enterprise AI tools
+- AI use cases
+- model updates
