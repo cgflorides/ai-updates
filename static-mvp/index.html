@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pulse AI Daily</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="hero">
+        <p class="eyebrow">Daily AI Intelligence</p>
+        <h1>Pulse AI Daily</h1>
+        <p class="hero-copy">
+          A simple dashboard for tracking meaningful AI progress, product launches,
+          and industry news in one place.
+        </p>
+        <div class="hero-meta">
+          <div class="meta-card">
+            <span class="meta-label">Update Time</span>
+            <strong id="update-date">Loading...</strong>
+          </div>
+          <div class="meta-card">
+            <span class="meta-label">Top Story</span>
+            <strong id="top-story-tag">Loading...</strong>
+          </div>
+          <div class="meta-card">
+            <span class="meta-label">Stories Loaded</span>
+            <strong id="story-count">0</strong>
+          </div>
+        </div>
+      </header>
+
+      <main class="dashboard">
+        <section class="panel panel-large">
+          <div class="panel-header">
+            <div>
+              <p class="section-label">Today</p>
+              <h2>Key Updates</h2>
+            </div>
+            <label class="filter">
+              <span>Category</span>
+              <select id="category-filter">
+                <option value="all">All</option>
+              </select>
+            </label>
+          </div>
+          <div class="toolbar">
+            <p id="feed-status" class="feed-status">Loading live AI headlines...</p>
+            <button id="refresh-button" class="refresh-button" type="button">
+              Refresh
+            </button>
+          </div>
+          <div id="news-grid" class="news-grid"></div>
+        </section>
+
+        <section class="side-column">
+          <section class="panel">
+            <div class="panel-header">
+              <div>
+                <p class="section-label">Signal</p>
+                <h2>Why It Matters</h2>
+              </div>
+            </div>
+            <div id="highlights" class="highlights"></div>
+          </section>
+
+          <section class="panel">
+            <div class="panel-header">
+              <div>
+                <p class="section-label">Sources</p>
+                <h2>Trusted Feeds</h2>
+              </div>
+            </div>
+            <ul class="sources-list">
+              <li>OpenAI official news feed</li>
+              <li>Google News AI search feed</li>
+              <li>Google News OpenAI search feed</li>
+              <li>Google News Anthropic search feed</li>
+              <li>Google News DeepMind search feed</li>
+            </ul>
+          </section>
+        </section>
+      </main>
+    </div>
+
+    <template id="news-card-template">
+      <article class="news-card">
+        <div class="news-card-top">
+          <span class="category-badge"></span>
+          <span class="source-name"></span>
+        </div>
+        <h3 class="news-title"></h3>
+        <p class="news-summary"></p>
+        <p class="news-impact"></p>
+        <a class="news-link" target="_blank" rel="noreferrer">Read source</a>
+      </article>
+    </template>
+
+    <template id="highlight-template">
+      <article class="highlight-card">
+        <h3></h3>
+        <p></p>
+      </article>
+    </template>
+
+    <script src="./app.js"></script>
+  </body>
+</html>
