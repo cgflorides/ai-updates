@@ -167,6 +167,33 @@ const FEEDS = [
   },
 ];
 
+const CURATED_SOURCE_ITEMS = [
+  {
+    id: "tldr-ai-newsletter-issue",
+    sourceId: "tldr-ai-newsletter",
+    sourceName: "TLDR AI newsletter",
+    sourceType: "Newsletter",
+    weight: 11,
+    title: "TLDR AI newsletter issue",
+    link: "https://a.tldrnewsletter.com/web-version?ep=1&lc=6f9ec23c-1bc8-11ed-9258-0241b9615763&p=dacc1034-37cb-11f1-8564-8b48279be49b&pt=campaign&t=1776162912&s=7059bb2184fa9c28a749de2c4e8dfa8b6600138f5c3bbaa919531533649713cf",
+    date: "2026-04-22",
+    description:
+      "A curated TLDR AI newsletter issue with concise AI, machine learning, research, and industry updates for technical readers.",
+  },
+  {
+    id: "rundown-sergey-brin-deepmind-claude-catch-up",
+    sourceId: "the-rundown-ai",
+    sourceName: "The Rundown AI",
+    sourceType: "Newsletter",
+    weight: 12,
+    title: "Sergey Brin commits DeepMind to a Claude catch-up",
+    link: "https://therundown.ai/p/sergey-brin-commits-deepmind-to-a-claude-catch-up",
+    date: "2026-04-22",
+    description:
+      "The Rundown AI tracks Sergey Brin pushing DeepMind to close the gap with Claude, a model update and enterprise AI signal relevant to leadership and consulting conversations.",
+  },
+];
+
 const fallbackNewsItems = [
   {
     id: "fallback-regulation",
@@ -494,6 +521,27 @@ function normalizeItem(rawItem, feed) {
   return item;
 }
 
+function normalizeCuratedItem(item) {
+  return normalizeItem(
+    {
+      id: item.id,
+      title: item.title,
+      source: item.sourceName,
+      sourceType: item.sourceType,
+      link: item.link,
+      date: item.date,
+      description: item.description,
+    },
+    {
+      id: item.sourceId,
+      name: item.sourceName,
+      type: item.sourceType,
+      url: item.link,
+      weight: item.weight,
+    }
+  );
+}
+
 async function fetchFeed(feed) {
   const url = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feed.url)}`;
   const response = await fetch(url, {
@@ -609,6 +657,7 @@ function buildHighlights(newsItems, clusters) {
 export async function getNewsBundle() {
   let newsItems;
   let status;
+  const curatedItems = CURATED_SOURCE_ITEMS.map(normalizeCuratedItem);
 
   try {
     const results = await Promise.allSettled(FEEDS.map(fetchFeed));
@@ -620,24 +669,27 @@ export async function getNewsBundle() {
       throw new Error("No stories loaded");
     }
 
-    newsItems = sortByPriority(uniqueByLink(successfulItems)).slice(0, 18);
+    newsItems = sortByPriority(uniqueByLink([...successfulItems, ...curatedItems])).slice(0, 18);
     status = "Live feeds connected on the server.";
   } catch (error) {
     newsItems = sortByPriority(
-      fallbackNewsItems.map((item) =>
-        normalizeItem(
-          {
-            ...item,
-          },
-          {
-            id: "fallback",
-            name: item.source,
-            type: item.sourceType,
-            url: item.link,
-            weight: 10,
-          }
-        )
-      )
+      uniqueByLink([
+        ...fallbackNewsItems.map((item) =>
+          normalizeItem(
+            {
+              ...item,
+            },
+            {
+              id: "fallback",
+              name: item.source,
+              type: item.sourceType,
+              url: item.link,
+              weight: 10,
+            }
+          )
+        ),
+        ...curatedItems,
+      ])
     );
     status = "Live feeds were unavailable, so fallback stories are shown.";
   }
@@ -650,12 +702,20 @@ export async function getNewsBundle() {
     newsItems,
     clusters,
     highlights: buildHighlights(newsItems, clusters),
-    sources: FEEDS.map((feed) => ({
-      id: feed.id,
-      name: feed.name,
-      type: feed.type,
-      url: feed.url,
-    })),
+    sources: [
+      ...FEEDS.map((feed) => ({
+        id: feed.id,
+        name: feed.name,
+        type: feed.type,
+        url: feed.url,
+      })),
+      ...CURATED_SOURCE_ITEMS.map((item) => ({
+        id: item.sourceId,
+        name: item.sourceName,
+        type: item.sourceType,
+        url: item.link,
+      })),
+    ],
     defaultScoringWeights: DEFAULT_SCORING_WEIGHTS,
     defaultTopicSettings: DEFAULT_TOPIC_SETTINGS,
     topicDefinitions: Object.fromEntries(
